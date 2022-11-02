@@ -13,13 +13,13 @@ function removeUnnededInRoot(svgData: string): string {
 }
 
 function addExplicitFillNone(svgData: string): string {
-    const matchShapesWithoutSpecificFill = /(rect|circle|line|polygon|path) (?:(?!fill="))(?=.*?>)/gm
+    const matchShapesWithoutSpecificFill = /(rect|circle|line|polygon|path) (?:(?!.*?fill="))(?=.*?>)/gm
     return svgData.replace(matchShapesWithoutSpecificFill, '$1 fill="none" ');
 }
 
 function removeSecondaryFillAndStroke(svgData: string): string {
-    const matchColoredFillOrStroke = /(fill|stroke)(="#(f|0)*?")/gim
-    return svgData.replace(matchColoredFillOrStroke, '');
+    const matchSecondaryColoredFillOrStroke = /(fill|stroke)(="#(f)*?")/gim
+    return svgData.replace(matchSecondaryColoredFillOrStroke, '');
 }
 
 function replaceColorWithCurrentColor(svgData: string): string {
