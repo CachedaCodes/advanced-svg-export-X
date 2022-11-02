@@ -56,7 +56,8 @@ export const defaultPluginsSettings = {
   // removeAttributesBySelector: true,
   // addClassesToSVGElement: true,
   removeStyleElement: false,
-  removeScriptElement: false
+  applyXProcess: false,
+  removeScriptElement: false,
   // addAttributesToSVGElement,
 }
 
@@ -68,8 +69,8 @@ export type PluginsConfiguration = {
 }[]
 
 export function getPluginsConfiguration(
-  settings: PluginsSettings,
-  prefix: string
+    settings: PluginsSettings,
+    prefix: string
 ): PluginsConfiguration {
   return Object.keys(settings).reduce((config, key) => {
     const k = key as keyof PluginsSettings

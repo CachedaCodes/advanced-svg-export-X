@@ -208,6 +208,7 @@ export const App = () => {
           onCloseClick={closeSettings}
           onSettingsChanged={onSettingsChanged}
           settings={state.settings}
+          svgToPreview={state.svgs[0]}
         />
       ) : null}
     </>

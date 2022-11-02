@@ -10,8 +10,8 @@ import version from './version'
 const log = debug('[SVGO] Main')
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__, {
-  width: 400,
-  height: 300 // ,
+  width: 600,
+  height: 500 // ,
   // position: 'last'
 })
 

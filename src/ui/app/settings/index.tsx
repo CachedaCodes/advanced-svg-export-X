@@ -6,7 +6,9 @@ import { Layout } from '../components/layout'
 import { pluginsWithDescription } from '../svgo/plugins'
 import { cls, formatSize } from '../util'
 import { Header } from './header'
+import { SvgPreview } from './svg-preview'
 import * as styles from './settings.css'
+import { ISVGOptimized, ISVGProgress } from '../svgo/types'
 
 interface ISettingsProps {
   totalSaved: number
@@ -16,7 +18,8 @@ interface ISettingsProps {
     defaultsRestored: boolean,
     keepOpen?: boolean
   ): void
-  onCloseClick(): void
+  onCloseClick(): void,
+  svgToPreview: ISVGOptimized | ISVGProgress
 }
 
 interface ISettingsState {
@@ -39,10 +42,11 @@ const stateToSettings = (state: ISettingsState[]): PluginsSettings =>
   }, {} as PluginsSettings)
 
 export const Settings = ({
-  totalSaved,
-  settings: initialSettings,
-  onCloseClick,
-  onSettingsChanged
+    totalSaved,
+    settings: initialSettings,
+    onCloseClick,
+    onSettingsChanged,
+    svgToPreview
 }: ISettingsProps) => {
   const [state, setState] = React.useState(settingsToState(initialSettings))
   const [latestSaveTs, setLatestSaveTs] = React.useState(0)
@@ -59,7 +63,7 @@ export const Settings = ({
 
   const onChange = (id: keyof PluginsSettings, checked: boolean) => {
     const newSettings = state.map(setting =>
-      setting.id === id ? { ...setting, active: checked } : setting
+        setting.id === id ? { ...setting, active: checked } : setting
     )
     setLatestSaveTs(Date.now())
     setState(newSettings)
@@ -77,13 +81,21 @@ export const Settings = ({
         {...cls(styles.contentWrapper)}
         theme="dark"
         header={
-          <Header
-            latestSaveTs={latestSaveTs}
-            restoreDefaultsDisabled={restoreDefaultsDisabled}
-            onRestoreDefaults={onRestoreDefaultsClick}
-            onSaveClick={onSaveClick}
-            onCloseClick={onCloseClick}
-          />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Header
+                latestSaveTs={latestSaveTs}
+                restoreDefaultsDisabled={restoreDefaultsDisabled}
+                onRestoreDefaults={onRestoreDefaultsClick}
+                onSaveClick={onSaveClick}
+                onCloseClick={onCloseClick}
+            />
+            <div {...cls(styles.content)} style={{ overflow: 'hidden' }}>
+              <div {...cls(styles.contentHeader)}>
+                SVG Preview:
+              </div>
+              <SvgPreview SvgOptimized={svgToPreview as ISVGOptimized} />
+            </div>
+          </div>
         }
       >
         <div {...cls(styles.content)}>

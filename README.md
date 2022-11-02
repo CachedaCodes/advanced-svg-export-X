@@ -1,10 +1,8 @@
- # <img src="media/header.svg" width="800" align="center" alt="Advanced SVG Export"/>
+# Advanced SVG Export X.
 
-[Install to Figma](https://www.figma.com/community/plugin/782713260363070260/Advanced-SVG-Export)
+Figma plugin to export SVG in XDS format.
 
-Ever used a third-party tool to optimize SVG, exported from Figma?
-Well, now you don't have to – Advanced SVG Export lets you optimize SVG before exporting.
+[Install to Figma](https://www.figma.com/community/plugin/1168912766396607908/Advanced-SVG-Export-X)
 
-Customizable optimizations by using [SVGO](https://github.com/svg/svgo) under the hood.
+Forked from [Advanced SVG Export](https://github.com/okotoki/advanced-svg-export)
 
-2020 © Okotoki Software

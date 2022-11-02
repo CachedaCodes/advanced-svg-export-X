@@ -183,5 +183,9 @@ export const pluginsWithDescription: {
   {
     id: 'reusePaths',
     name: 'Replace duplicate elements with links'
+  },
+  {
+    id: 'applyXProcess',
+    name: 'Apply X Process'
   }
 ]

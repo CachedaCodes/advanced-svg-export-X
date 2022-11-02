@@ -1,8 +1,7 @@
 {
-  "name": "figma-plugin-starter",
-  "version": "0.0.1",
-  "description": "Yet another Figma plugin starter",
-  "repository": "https://github.com/opudalo/figma-plugin-starter",
+  "name": "advanced-svg-export-x",
+  "version": "0.1.0",
+  "description": "Advanced SVG Export X Plugin",
   "author": "Opudalo",
   "license": "BSD-3",
   "private": true,
@@ -27,6 +26,7 @@
     "svgo": "^2.8.0"
   },
   "devDependencies": {
+    "@figma/plugin-typings": "^1.55.1",
     "@types/webpack": "^4.39.8",
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
