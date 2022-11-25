@@ -116,6 +116,38 @@ export const saveAsZip = (svgs: ISVGOptimized[]) => {
   })
 }
 
+export const saveComponentsAsZip = (svgs: ISVGOptimized[]) => {
+  const zip = new JSZip()
+  const names: { [k: string]: number } = {}
+  svgs.forEach(x => {
+    const n = x.exportName.toLowerCase()
+
+    names[n] = isUndefined(names[n]) ? 0 : names[n] + 1
+
+    zip.file(
+        `${x.exportName}${names[n] > 0 ? ' ' + names[n] : ''}.vue`,
+        wrapSvgInXVueComponent(x.svgOptimized),
+        { binary: false }
+    )
+  })
+
+  zip.generateAsync({ type: 'blob' }).then(data => {
+    saveAs(data, 'componentsExport.zip')
+  })
+}
+
+const wrapSvgInXVueComponent = (svg: ISVGOptimized['svgOptimized']) => {
+  const componentString = `<template functional>
+  ${svg}
+</template>
+
+<script lang="ts">
+  export default {};
+</script>`
+
+  return componentString
+}
+
 export function usePrev<T>(value: T): T | undefined {
   const ref = React.useRef<T>()
   React.useEffect(() => {

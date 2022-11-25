@@ -13,7 +13,7 @@ import { initialState, reducer } from './state'
 import { serializedToProgress } from './svgo'
 import SVGOWorker from './svgo/svgo.worker'
 import { ISVGOptimized, ISVGProgress } from './svgo/types'
-import { cls, getSize, saveAsZip } from './util'
+import {cls, getSize, saveAsZip, saveComponentsAsZip} from './util'
 
 const log = debug('[SVGO] App')
 
@@ -47,12 +47,14 @@ interface IHeaderProps {
   showExportButton: boolean
   onSettingsClick(): void
   onExportClick(): void
+  onExportVueClick(): void
 }
 
 const Header: React.FC<IHeaderProps> = ({
   onSettingsClick,
   count,
   onExportClick,
+  onExportVueClick,
   showExportButton
 }) => (
   <div>
@@ -61,6 +63,9 @@ const Header: React.FC<IHeaderProps> = ({
         export {count} layers
       </TextButton>
     ) : null}
+    <TextButton className={styles.exportButton} onClick={onExportVueClick}>
+      export all as VUE components
+    </TextButton>
     <TextButton className={styles.settingsButton} onClick={onSettingsClick}>
       settings
     </TextButton>
@@ -169,6 +174,10 @@ export const App = () => {
     saveAsZip(state.svgs as ISVGOptimized[])
   }
 
+  const onExportAllAsVue = () => {
+    saveComponentsAsZip(state.svgs as ISVGOptimized[])
+  }
+
   const optimizingFinished = !state.svgs.find(x => !x.isDone)
 
   return (
@@ -180,6 +189,7 @@ export const App = () => {
               showExportButton={optimizingFinished && l > 1}
               count={l}
               onExportClick={onExportAll}
+              onExportVueClick={onExportAllAsVue}
               onSettingsClick={openSettings}
             />
           }
