@@ -1,41 +1,63 @@
-export function xProcess(svgData: string): string {
-    let processedSvgData = removeDimensions(svgData);
-    processedSvgData = addFillNoneInRoot(processedSvgData);
-    processedSvgData = addXClass(processedSvgData);
-    processedSvgData = replaceColorWithCurrentColor(processedSvgData);
+/**
+ * Applies to an SVG the format required by the XDS.
+ *
+ * @param svg - The SVG that will be processed.
+ *
+ * @returns The processed SVG.
+ */
+export function xProcess(svg: string): string {
+    let processedSvg = removeDimensions(svg);
+    processedSvg = addFillNoneInRoot(processedSvg);
+    processedSvg = addXClass(processedSvg);
+    processedSvg = replaceColorWithCurrentColor(processedSvg);
 
-    return processedSvgData.replace(/  +/g, ' ');
+    return processedSvg.replace(/  +/g, ' ');
 }
 
-function removeDimensions(svgData: string): string {
-    const matchDimensions = /(?<=<svg.*?)((width|height)="[0-9]*?")(?=.*?>)/gm
-    return svgData.replace(matchDimensions, '');
+/**
+ * Removes the dimensions (height and width) from the root of an SVG.
+ *
+ * @param svg - The SVG that will be processed.
+ *
+ * @returns The processed SVG.
+ */
+export function removeDimensions(svg: string): string {
+    const matchDimensions = /(?<=<svg.*?)((width|height)="[0-9]*?")(?=.*?>)/gm;
+    return svg.replace(matchDimensions, '');
 }
 
-function addFillNoneInRoot(svgData: string): string {
-    const matchRootWithoutFillNone = /svg (?:(?!.*?fill="none"))(?=.*?>)/gm
-    return svgData.replace(matchRootWithoutFillNone, '$1 fill="none"');
+/**
+ * Adds `fill="none"` to the root of an SVG if it doesn't have it.
+ *
+ * @param svg - The SVG that will be processed.
+ *
+ * @returns The processed SVG.
+ */
+export function addFillNoneInRoot(svg: string): string {
+    const matchRootWithoutFillNone = /svg (?:(?!.*?fill="none"))(?=.*?>)/gm;
+    return svg.replace(matchRootWithoutFillNone, 'svg fill="none" ');
 }
 
-function addXClass(svgData: string): string {
-    const matchRoot = /svg /gm
-    return svgData.replace(matchRoot, 'svg :class="[\'x-icon\'].concat(data.staticClass, data.class)"');
+/**
+ * Adds the `x-icon` and the data classes to the root of an SVG.
+ *
+ * @param svg - The SVG that will be processed.
+ *
+ * @returns The processed SVG.
+ */
+export function addXClass(svg: string): string {
+    const matchRoot = /svg /gm;
+    return svg.replace(matchRoot, 'svg :class="[\'x-icon\'].concat(data.staticClass, data.class)" ');
 }
 
-// Out of use
-function addExplicitFillNone(svgData: string): string {
-    const matchShapesWithoutSpecificFill = /(rect|circle|line|polygon|path) (?:(?!.*?fill="))(?=.*?>)/gm
-    return svgData.replace(matchShapesWithoutSpecificFill, '$1 fill="none" ');
+/**
+ * Replaces all the colors in the SVG with `currentColor`, except white.
+ *
+ * @param svg - The SVG that will be processed.
+ *
+ * @returns The processed SVG.
+ */
+export function replaceColorWithCurrentColor(svg: string): string {
+    const matchColoredFillOrStroke = /(?<=(fill|stroke)=")(?!#fff+"|white|none).*?(?=")/gim;
+    return svg.replace(matchColoredFillOrStroke, 'currentColor');
 }
-
-// Out of use
-function removeSecondaryFillAndStroke(svgData: string): string {
-    const matchSecondaryColoredFillOrStroke = /(fill|stroke)(="#(f)*?")/gim
-    return svgData.replace(matchSecondaryColoredFillOrStroke, '');
-}
-
-function replaceColorWithCurrentColor(svgData: string): string {
-    const matchColoredFillOrStroke = /(?<=(fill|stroke)=")(?!#fff"|none).*?(?=")/gim
-    return svgData.replace(matchColoredFillOrStroke, 'currentColor');
-}
-
